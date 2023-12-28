@@ -44,6 +44,6 @@ jobs:
         uses: peter-evans/repository-dispatch@v2
         with:
           token: ${{ secrets.PAT }}
-          repository: Aswathy-1717/aswathy
+          repository: Aswathy-1717/New-shopping-infra
           event-type: dev-deploy-event
 
