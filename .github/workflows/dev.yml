@@ -1,4 +1,4 @@
-name: "Image-creation-dev"
+name: Image-creation-dev
 
 on:
   push:
@@ -9,30 +9,30 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      packer_version: "1.9.4"
+      PACKER_VERSION: "1.9.4"
 
     steps:
-      - name: "Checkout Repository"
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: "Setup packer"
-        uses: hashicorp/setup-packer@main
+      - name: Setup packer
+        uses: hashicorp/setup-packer@v1
         with:
           version: ${{ env.PACKER_VERSION }} 
 
-      - name: "packer init"
+      - name: packer init
         run: packer init .
         working-directory: ./packer/
 
-      - name: "packer validate"
-        run: packer validate -var-file="dev.pkrvars.hcl" . 
+      - name: packer validate
+        run: packer validate -var-file="dev.pkrvars.hcl" .
         working-directory: ./packer/
 
-      - name: "packer-formating"
+      - name: packer formatting
         run: packer fmt .
         working-directory: ./packer/
 
-      - name: "building image"
+      - name: building image
         run: packer build -var-file="dev.pkrvars.hcl" .
         working-directory: ./packer/
         env:
@@ -40,11 +40,10 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.DEV_AWS_REGION }}
 
-     - name: "Dev deployment starter"
-       uses: peter-evans/repository-dispatch@v2
-       with:
-         token: ${{secrets.PAT}}
-         repository: Aswathy-1717/aswathy
-         event-type: dev-deploy-event
-
+      - name: Dev deployment starter
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.PAT }}
+          repository: Aswathy-1717/aswathy
+          event-type: dev-deploy-event
 
